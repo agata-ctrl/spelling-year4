@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spelling Spin</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="setup-screen" id="setupScreen">
+        <div class="brand-panel">
+          <div class="brand-copy">
+            <p class="eyebrow">Spelling practice game</p>
+            <h1>Spelling Spin</h1>
+            <p class="intro">Choose a word set, spin the wheel, and race through three rounds.</p>
+          </div>
+        </div>
+
+        <form class="setup-panel" id="setupForm">
+          <fieldset>
+            <legend>Players</legend>
+            <div class="game-mode" role="radiogroup" aria-label="Game mode">
+              <label>
+                <input type="radio" name="gameMode" value="friend" checked />
+                <span>Play a friend</span>
+              </label>
+              <label>
+                <input type="radio" name="gameMode" value="bot" />
+                <span>Play the bot</span>
+              </label>
+            </div>
+            <div class="player-count" role="radiogroup" aria-label="Number of players">
+              <label>
+                <input type="radio" name="playerCount" value="2" checked />
+                <span>2</span>
+              </label>
+              <label>
+                <input type="radio" name="playerCount" value="3" />
+                <span>3</span>
+              </label>
+            </div>
+            <div class="name-grid">
+              <label>
+                Player 1
+                <input id="player1" maxlength="14" placeholder="Player 1 name" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
+              </label>
+              <label>
+                Player 2
+                <input id="player2" maxlength="14" placeholder="Player 2 name" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
+              </label>
+              <label id="player3Wrap" class="is-hidden">
+                Player 3
+                <input id="player3" maxlength="14" placeholder="Player 3 name" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Words</legend>
+            <label class="word-set-label" for="wordSetSelect">
+              Choose a word set
+              <select id="wordSetSelect" required>
+                <option value="" selected disabled>Select a word set</option>
+              </select>
+            </label>
+            <div class="word-preview" id="wordPreview" aria-live="polite"></div>
+            <div class="custom-word-wrap is-hidden" id="customWordWrap">
+              <p class="word-box-label">Write your own words</p>
+              <div class="custom-word-grid" aria-label="Custom spelling words">
+                <label>Word 1<input class="custom-word-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" /></label>
+                <label>Word 2<input class="custom-word-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" /></label>
+                <label>Word 3<input class="custom-word-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" /></label>
+                <label>Word 4<input class="custom-word-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" /></label>
+                <label>Word 5<input class="custom-word-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" /></label>
+                <label>Word 6<input class="custom-word-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" /></label>
+                <label>Word 7<input class="custom-word-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" /></label>
+                <label>Word 8<input class="custom-word-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" /></label>
+                <label>Word 9<input class="custom-word-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" /></label>
+                <label>Word 10<input class="custom-word-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" /></label>
+              </div>
+            </div>
+          </fieldset>
+
+          <button class="primary-button" type="submit">Start Game</button>
+        </form>
+      </section>
+
+      <section class="game-screen is-hidden" id="gameScreen" aria-live="polite">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Round <span id="roundNumber">1</span></p>
+            <h2 id="turnTitle">Player 1's turn</h2>
+          </div>
+          <div class="top-actions">
+            <button class="ghost-button score-toggle" id="scoreToggleButton" type="button">Hide Overall Score</button>
+            <button class="ghost-button" id="newRoundButton" type="button">Next Word</button>
+            <button class="ghost-button" id="resetButton" type="button">New Game</button>
+          </div>
+        </header>
+
+        <section class="scoreboard" id="scoreboard" aria-label="Scores"></section>
+
+        <section class="final-panel is-hidden" id="finalPanel" aria-live="polite">
+          <p class="eyebrow">Final results</p>
+          <h3 id="winnerTitle">Winner</h3>
+          <div class="final-scores" id="finalScores"></div>
+        </section>
+
+        <section class="choice-panel is-hidden" id="choicePanel" aria-live="polite">
+          <div class="choice-card">
+            <p class="eyebrow">Choose player</p>
+            <h3 id="choiceTitle">Choose an opponent</h3>
+            <p id="choiceText"></p>
+            <div class="choice-options" id="choiceOptions"></div>
+          </div>
+        </section>
+
+        <section class="mystery-overlay is-hidden" id="mysteryPanel" aria-live="polite">
+          <div class="mystery-card">
+            <p class="eyebrow">Mystery box</p>
+            <h3>Pick a card</h3>
+            <p id="mysteryText">Choose one card to reveal what happens.</p>
+            <div class="mystery-cards" id="mysteryCards"></div>
+          </div>
+        </section>
+
+        <section class="jackpot-overlay is-hidden" id="jackpotPanel" aria-live="polite">
+          <div class="jackpot-card">
+            <p class="eyebrow">Jackpot</p>
+            <h3>Spin the jackpot wheel</h3>
+            <p id="jackpotText">Land a prize, then play passes to the next player.</p>
+            <div class="jackpot-wheel-wrap">
+              <div class="jackpot-pointer" aria-hidden="true"></div>
+              <canvas id="jackpotCanvas" width="360" height="360" aria-label="Jackpot wheel"></canvas>
+            </div>
+            <button class="primary-button jackpot-spin-button" id="jackpotSpinButton" type="button">Spin Jackpot</button>
+          </div>
+        </section>
+
+        <section class="playfield">
+          <div class="wheel-area">
+            <div class="wheel-pointer" aria-hidden="true"></div>
+            <canvas id="wheelCanvas" width="480" height="480" aria-label="Prize wheel"></canvas>
+            <div class="wheel-pop is-hidden" id="wheelPop" aria-hidden="true"></div>
+            <div class="bankrupt-blast is-hidden" id="bankruptBlast" aria-hidden="true">
+              <div class="blast-core">BANKRUPT</div>
+              <span class="soot soot-a"></span>
+              <span class="soot soot-b"></span>
+              <span class="soot soot-c"></span>
+              <span class="soot soot-d"></span>
+              <span class="soot soot-e"></span>
+            </div>
+            <div class="jackpot-celebration is-hidden" id="jackpotCelebration" aria-hidden="true"></div>
+            <button class="spin-button" id="spinButton" type="button">Hold to Spin</button>
+            <p class="wheel-result" id="wheelResult">Spin to start your turn.</p>
+          </div>
+
+          <div class="puzzle-area">
+            <div class="word-stage">
+              <p class="eyebrow">Mystery word</p>
+              <div class="puzzle-word" id="puzzleWord" aria-label="Word puzzle"></div>
+            </div>
+
+            <div class="controls">
+              <div class="letter-control">
+                <label for="letterInput">Guess a letter</label>
+                <div class="input-row">
+                  <input id="letterInput" name="letter_only" maxlength="1" autocomplete="new-password" autocorrect="off" autocapitalize="none" spellcheck="false" aria-autocomplete="none" inputmode="text" />
+                  <button class="secondary-button" id="guessLetterButton" type="button">Guess</button>
+                </div>
+              </div>
+
+              <div class="solve-control">
+                <label for="solveInput">Spell the whole word</label>
+                <div class="input-row">
+                  <input id="solveInput" name="spelling_answer" autocomplete="new-password" autocorrect="off" autocapitalize="none" spellcheck="false" aria-autocomplete="none" />
+                  <button class="secondary-button" id="solveButton" type="button">Solve</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="used-letters">
+              <p class="eyebrow">Used letters</p>
+              <div id="usedLetters"></div>
+            </div>
+
+            <div class="message-log" id="messageLog" aria-live="assertive"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
