@@ -95,6 +95,11 @@ const wordSets = {
     name: "Stage 4 - Lesson 5",
     description: "Words with the prefix 'inter-'",
     words: ["interact", "interchange", "intercity", "interface", "internet", "intercept", "international", "intercom", "interfere", "interview"]
+  },
+  stage4Lesson6: {
+    name: "Stage 4 - Lesson 6",
+    description: "Challenge words",
+    words: ["strength", "calendar", "appear", "interest", "increase", "grammar", "women", "straight", "opposite", "believe"]
   }
 };
 
