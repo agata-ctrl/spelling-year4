@@ -100,6 +100,11 @@ const wordSets = {
     name: "Stage 4 - Lesson 6",
     description: "Challenge words",
     words: ["strength", "calendar", "appear", "interest", "increase", "grammar", "women", "straight", "opposite", "believe"]
+  },
+  stage4Lesson8: {
+    name: "Stage 4 - Lesson 8",
+    description: "Words ending in '-ate' and '-ion'",
+    words: ["adoration", "observation", "combination", "determination", "duration", "admiration", "exploration", "preparation", "sensation", "registration"]
   }
 };
 
@@ -374,9 +379,9 @@ function balancedWheelWeight(segment) {
   let weight = segment.weight;
 
   if (state.players.length > 0 && state.playerIndex === 0) {
-    if (segment.type === "bankrupt") weight *= 0.58;
+    if (segment.type === "bankrupt") weight *= 0.25;
     if (segment.type === "shield") weight *= canCurrentPlayerReceiveShield() ? 1.25 : 0;
-    if (segment.type === "points" && segment.value >= 150) weight *= 1.08;
+    if (segment.type === "points") weight *= 3;
   }
 
   return weight;
